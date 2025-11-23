@@ -11,10 +11,6 @@ declare global {
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-	throw new Error("Defined MONGODB_URI in .env file");
-}
-
 const cached: MongooseCache = global.mongooseCache ?? {
 	conn: null,
 	promise: null,
@@ -25,6 +21,10 @@ if (!global.mongooseCache) {
 }
 
 async function dbConnect(): Promise<typeof mongoose> {
+	if (!MONGODB_URI) {
+		throw new Error("Defined MONGODB_URI in .env file");
+	}
+
 	if (cached.conn) return cached.conn;
 	if (!cached.promise) {
 		const options = {

@@ -57,6 +57,10 @@ BookingSchema.pre("save", async function (next) {
 BookingSchema.index({ eventId: 1 });
 BookingSchema.index({ eventId: 1, createdAt: -1 });
 BookingSchema.index({ email: 1 });
+BookingSchema.index(
+	{ email: 1, eventId: 1 },
+	{ unique: true, name: "email_eventId_unique" }
+);
 
 const BookingModel = models.Booking || model<Booking>("Booking", BookingSchema);
 
