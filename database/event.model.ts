@@ -137,7 +137,7 @@ function normalizeDate(date: string): string {
 }
 
 function normalizeTime(time: string): string {
-	const timeRegex = /^(\d{1,2}):(\d{2})(\d{2})(\s*(AM|PM))?$/i;
+	const timeRegex = /^(\d{1,2}):(\d{2})(\s*(AM|PM))?$/i;
 	const match = time.trim().match(timeRegex);
 	if (!match) {
 		throw new Error("Invalid time format");
