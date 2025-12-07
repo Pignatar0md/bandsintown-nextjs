@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
 
 export type EventCardProps = {
 	slug: string;
@@ -22,7 +21,7 @@ const EventCard = ({
 	return (
 		<>
 			<Link
-				href={`/events/${slug}`}
+				href={`/event/${slug}`}
 				id="event-card"
 				className="group block relative w-70 h-96"
 			>
