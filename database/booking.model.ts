@@ -1,5 +1,5 @@
 import { Types, Schema, model, models, Document } from "mongoose";
-import { EventModel } from "./event.model";
+import EventModel from "./event.model";
 
 export interface Booking extends Document {
 	eventId: Types.ObjectId;
