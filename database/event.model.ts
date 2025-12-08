@@ -10,7 +10,7 @@ export interface Event extends Document {
 	location: string;
 	date: string;
 	time: string;
-	mode: string;
+	mode: "online" | "hybrid" | "insite";
 	audience: string;
 	agenda: string[];
 	organizer: string;
@@ -71,8 +71,8 @@ const EventSchema = new Schema<Event>(
 			type: String,
 			required: [true, "Mode is required"],
 			enum: {
-				values: ["online", "hybrid", "offline"],
-				message: "Mode must be either online, hybrid, or offline",
+				values: ["online", "hybrid", "insite"],
+				message: "Mode must be either online, hybrid, or insite",
 			},
 		},
 		audience: {
@@ -160,17 +160,8 @@ function normalizeTime(time: string): string {
 		.padStart(2, "0")}`;
 }
 
-EventSchema.index({ slug: 1 }, { unique: true });
-
 EventSchema.index({ date: 1, time: 1 });
 
 const EventModel = models.Event || model<Event>("Event", EventSchema);
 
 export default EventModel;
-// EventSchema.post("save", function (error, doc, next) {
-// 	if (error.name === "MongoServerError" && error.code === 11000) {
-// 		next(new Error("Event with this title already exists"));
-// 	} else {
-// 		next(error);
-// 	}
-// });

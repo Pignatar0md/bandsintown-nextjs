@@ -1,7 +1,7 @@
 
 const EventAgenda = ({ agendaItems }: { agendaItems: string[]}) => {
   return (
-    <div className="agende">
+    <div className="agenda">
         <h2>Agenda</h2>
         <ul>
 

@@ -4,9 +4,16 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import EventTags from '@/components/EventTags';
 import BookEvent from '@/components/BookEvent';
+import { getSimilarEventsBySlug } from '@/lib/actions/event.actions';
+import EventCard from '@/components/EventCard';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const BOOKINGS = 10;
+
+const getSimilarEvents = async (slug: string) => {
+  const similarEvents = await getSimilarEventsBySlug(slug);
+  return similarEvents;
+};
 
 const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -16,6 +23,8 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
     return notFound();
   }
   const event = data.event;
+  const similarEvents = await getSimilarEvents(slug);
+  console.log(slug);
   return (
     <section id="event">
         <div className='header'>
@@ -32,18 +41,24 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                 </section>
                 <section className='flex-col-gap-2 '>
                     <h2>Event Details</h2>
-                    <EventDetailItem icon='/icons/check.png' alt='calendar' label='Date' />
-                    <EventDetailItem icon='/icons/wait.png' alt='clock' label='Time' />
-                    <EventDetailItem icon='/icons/pin.png' alt='location' label='Location' />
-                    <EventDetailItem icon='/icons/laptop.svg' alt='mode' label='Mode' />
-                    <EventDetailItem icon='/icons/user.png' alt='audience' label='Audience' />
+                    <EventDetailItem icon='/icons/check.png' alt='calendar' label={event.date} />
+                    <EventDetailItem icon='/icons/wait.png' alt='clock' label={event.time} />
+                    <EventDetailItem icon='/icons/pin.png' alt='location' label={event.location} />
+                    <EventDetailItem
+                      icon={event.mode === 'insite' ? `/icons/insite.png`
+                        : event.mode === 'online' ? `/icons/online.png`
+                        : `/icons/hybrid.png`}
+                      alt='mode'
+                      label={event.mode}
+                    />
+                    <EventDetailItem icon='/icons/user.png' alt='audience' label={event.audience} />
                 </section>
                 <EventAgenda agendaItems={event.agenda} />
                 <section className='flex-col-gap-2 '>
                     <h2>About the Organizer</h2>
                     <p>{event.organizer}</p>
                 </section>
-                <EventTags tags={JSON.parse(event.tags[0])} />
+                <EventTags tags={event.tags} />
             </div>
             <aside className='booking'>
                 <div className='signup-card'>
@@ -58,6 +73,22 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                 </div>
                 <BookEvent />
             </aside>
+        </div>
+        <div className='flex w-full flex-col gap-4 pt-20'>
+            <h2>Similar Events</h2>
+            <div className='events'>
+                {Array.isArray(similarEvents) && similarEvents.length > 0 && similarEvents.map((eventObj: any, idx: number) => (
+                    <EventCard 
+                        key={eventObj?.id ?? idx}
+                        slug={eventObj?.slug}
+                        title={eventObj?.title}
+                        image={eventObj?.image}
+                        date={eventObj?.date}
+                        time={eventObj?.time}
+                        location={eventObj?.location}
+                    />
+                ))}
+            </div>
         </div>
     </section>
   )
