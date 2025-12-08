@@ -6,6 +6,8 @@ import EventTags from '@/components/EventTags';
 import BookEvent from '@/components/BookEvent';
 import { getSimilarEventsBySlug } from '@/lib/actions/event.actions';
 import EventCard from '@/components/EventCard';
+import { cacheLife } from 'next/cache';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const BOOKINGS = 10;
@@ -16,6 +18,8 @@ const getSimilarEvents = async (slug: string) => {
 };
 
 const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  'use cache';
+  cacheLife('hours');
   const { slug } = await params;
   const response = await fetch(`${BASE_URL}/api/events/${slug}`);
   const data = await response.json();
@@ -24,7 +28,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
   }
   const event = data.event;
   const similarEvents = await getSimilarEvents(slug);
-  console.log(slug);
+  
   return (
     <section id="event">
         <div className='header'>
@@ -71,7 +75,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         )
                     }
                 </div>
-                <BookEvent />
+                <BookEvent eventId={event._id} slug={slug} />
             </aside>
         </div>
         <div className='flex w-full flex-col gap-4 pt-20'>
