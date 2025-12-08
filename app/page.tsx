@@ -4,6 +4,7 @@ import { Event } from "@/database";
 import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export default async function Page() {
 	'use cache';
 	cacheLife('hours');
@@ -14,7 +15,7 @@ export default async function Page() {
 	return (
 		<section>
 			<h1 className="text-center text-4xl font-bold">
-				The hub for live music events <br /> Events near you
+				The hub for good life events <br /> Events near you
 			</h1>
 			<p className="text-center mt-5 text-xl">
 				Music concerts, jams and more. All in one place.

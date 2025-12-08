@@ -1,5 +1,5 @@
 'use server';
-//server actions
+
 import { EventModel } from "@/database";
 import dbConnect from "../mongodb";
 
@@ -7,7 +7,6 @@ export const getSimilarEventsBySlug = async (slug: string) => {
     try {
         await dbConnect();
         const event = await EventModel.findOne({ slug });
-        console.log("event", event);
         
         if (!event) {
             console.error("Event not found for slug:", slug);
